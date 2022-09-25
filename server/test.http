@@ -1,0 +1,80 @@
+### To perform login
+POST http://localhost:3001/api/sessions HTTP/1.1
+content-type: application/json
+
+{
+    "username": "arthur.dent@studenti.polito.it",
+    "password": "password"
+}
+
+### To get (updated) current session
+GET http://localhost:3001/api/sessions/current HTTP/1.1
+content-type: application/json
+
+### To perform logout
+DELETE http://localhost:3001/api/sessions/current HTTP/1.1
+content-type: application/json
+
+### To get the list of all courses available
+GET http://localhost:3001/api/courses HTTP/1.1
+
+### To get user's studyplan
+GET http://localhost:3001/api/studyplan HTTP/1.1
+
+### delete user's studyplan
+DELETE http://localhost:3001/api/studyplan HTTP/1.1
+
+
+### Successful post of studyplan
+POST http://localhost:3001/api/studyplan HTTP/1.1
+content-type: application/json
+
+{
+    "studyplan":
+    ["01OTWOV","01UDFOV","01URROV","02GOLOV","03UEWOV"],
+    "time":"part"
+}
+
+### Study plan post validation error (course code len. not respected) 
+POST http://localhost:3001/api/studyplan HTTP/1.1
+content-type: application/json
+
+{"studyplan":["01OTWV","01UDFOV","01URROV","02GOLOV","03UEWOV"],"time":"part"}
+
+
+### Adding to study plan an insexisting course
+POST http://localhost:3001/api/studyplan HTTP/1.1
+content-type: application/json
+
+{"studyplan":["01OTSOV","01UDFOV","01URROV","02GOLOV","03UEWOV"],"time":"part"}
+
+### Adding to study plan an course that already reached max capacity
+POST http://localhost:3001/api/studyplan HTTP/1.1
+content-type: application/json
+
+{"studyplan":["01OTWOV","01UDFOV","01URROV","02GOLOV","01URSPD"],"time":"part"}
+
+### Adding a study plan with more or less credits than required
+POST http://localhost:3001/api/studyplan HTTP/1.1
+content-type: application/json
+
+{"studyplan":["01OTWOV","01UDFOV","01URROV","02GOLOV","01UDUOV","01TYMOV"],"time":"part"}
+
+### Violate constraint on preparatory course
+POST http://localhost:3001/api/studyplan HTTP/1.1
+content-type: application/json
+
+{"studyplan":["01OTWOV","01UDFOV","01URROV","02GOLOV","01TXSOV"],"time":"part"}
+
+### Violate constraint on incompatible course
+POST http://localhost:3001/api/studyplan HTTP/1.1
+content-type: application/json
+
+{"studyplan":["01OTWOV","01UDFOV","01URROV","01SQJOV","01SQLOV"],"time":"part"}
+
+### Error in DB (duplicated course in study plan)
+POST http://localhost:3001/api/studyplan HTTP/1.1
+content-type: application/json
+
+{"studyplan":["01OTWOV","01OTWOV","01URROV","01SQJOV"],"time":"part"}
+
